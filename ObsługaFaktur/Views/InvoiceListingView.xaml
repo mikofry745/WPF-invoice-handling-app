@@ -1,0 +1,481 @@
+﻿<UserControl
+    x:Class="ObsługaFaktur.Views.InvoiceListingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:ObsługaFaktur.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ObsługaFaktur.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:ObsługaFaktur.ViewModels"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    d:DataContext="{d:DesignInstance Type=viewModels:InvoiceListingViewModel}"
+    d:DesignHeight="1400"
+    d:DesignWidth="1600"
+    Background="{StaticResource DefaultLightGray}"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:TextBoxInvoiceNumberConverter x:Key="InvoiceNumberConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid 
+            Grid.Column="0" 
+            Margin="0 0 100 0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="74" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--#region Page title-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,3,0,0">
+                    <TextBlock
+                        FontSize="17"
+                        FontWeight="Bold"
+                        Text="Faktury" />
+
+                    <TextBlock
+                        FontSize="13"
+                        FontWeight="Normal"
+                        Text="Lista twoich faktur" />
+                </StackPanel>
+
+                <Button
+                    Grid.Column="1"
+                    Style="{StaticResource IconAddButtonStyle}">
+
+                    <materialDesign:PackIcon Style="{StaticResource IconAddButtonIconStyle}"
+                                             Kind="FileCheck"
+                                             Width="28"
+                                             Foreground="Black"
+                                             ToolTip="Zapisz do PDF"/>
+
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger
+                            EventName="Click">
+                            <b:CallMethodAction
+                                MethodName="SaveInvoiceToPdf"
+                                TargetObject="{Binding}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding NavigateToCreateInvoiceViewCommand}"
+                    Style="{StaticResource IconAddButtonStyle}">
+
+                    <materialDesign:PackIcon Style="{StaticResource IconAddButtonIconStyle}" />
+                </Button>
+
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Searchbar-->
+            <Grid Grid.Row="1" Margin="0,18,0,10">
+                <Border
+                    Grid.Row="1"
+                    Margin="0,0,0,5"
+                    Background="White"
+                    BorderBrush="LightGray"
+                    BorderThickness="1.5"
+                    Style="{StaticResource DefaultSearchBarBorderStyle}">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="32" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            Grid.Column="0"
+                            Margin="5,0,0,0"
+                            Style="{StaticResource MaterialDesignToolButton}">
+
+                            <materialDesign:PackIcon Cursor="Hand" Style="{StaticResource DefaultSearchbarToolIcon}" />
+                        </Button>
+
+                        <TextBox
+                            x:Name="searchbarTextbox"
+                            Grid.Column="1"
+                            Padding="4,0,0,3"
+                            VerticalContentAlignment="Center"
+                            BorderBrush="Transparent"
+                            Style="{StaticResource DefaultSearchBarTextBoxStyle}"        
+                            Text="{Binding SearchedInvoiceNumber, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    </Grid>
+
+                </Border>
+
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Invoice List-->
+            <Grid Grid.Row="2">
+                <DataGrid
+                    ItemsSource="{Binding Invoices}"
+                    SelectedItem="{Binding SelectedInvoice}"
+                    Style="{StaticResource DefaultDataGridStyle}">
+
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource DefaultDataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}" />
+                        <Style BasedOn="{StaticResource DefaultDataGridCellStyle}" TargetType="{x:Type DataGridCell}" >
+                            <Setter Property="Margin" Value="0 5 0 0"></Setter>
+                        </Style>
+                        <Style BasedOn="{StaticResource DefaultDataGridRowStyle}" TargetType="{x:Type DataGridRow}">
+                            <Setter Property="Height" Value="50" />
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.ContextMenu>
+                        <ContextMenu Background="{StaticResource DefaultLightGray}">
+
+                            <MenuItem
+                                Command="{Binding DeleteCommand}"
+                                CommandParameter="{Binding SelectedInvoice}"
+                                Cursor="Hand"
+                                FontSize="14"
+                                FontWeight="DemiBold"
+                                Header="Usuń" 
+                                Foreground="Red"/>
+
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Width="5" IsReadOnly="True">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Background" Value="#93cbff" />
+                                    <Setter Property="Margin" Value="0,0,10,0" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="2.4*"
+                            Binding="{Binding Number, Converter={StaticResource InvoiceNumberConverter}}"
+                            CanUserReorder="False"
+                            FontWeight="SemiBold"
+                            Header="Numer"
+                            IsReadOnly="True" />
+
+                        <DataGridTextColumn
+                            Width="2.4*"
+                            Binding="{Binding Issuer.Name}"
+                            CanUserReorder="False"
+                            Header="Sprzedawca"
+                            IsReadOnly="True" />
+
+                        <DataGridTextColumn
+                            Width="2.4*"
+                            Binding="{Binding Recipient.Name}"
+                            CanUserReorder="False"
+                            Header="Nabywca"
+                            IsReadOnly="True" />
+
+                        <DataGridTextColumn
+                            Width="3*"
+                            Binding="{Binding DateOfIssue, StringFormat={}{0:MM-dd-yyyy}}"
+                            CanUserReorder="False"
+                            Header="Data Wystawienia"
+                            IsReadOnly="True" />
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <!--#endregion-->
+
+        </Grid>
+
+        <!--#region Invoice Preview-->
+        <Grid
+            Grid.Column="1"
+            MaxWidth="650"
+            Margin="0,0,50,0"
+            Background="White">
+
+            <Grid Margin="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--#region Basic Information-->
+                <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="20"
+                            FontWeight="SemiBold"
+                            Text="Faktura " />
+                        <TextBlock
+                            FontSize="20"
+                            FontWeight="SemiBold"
+                            Text="{Binding SelectedInvoice.Type, Mode=OneWay}" />
+                        <TextBlock
+                            Margin="3,0,0,0"
+                            FontSize="20"
+                            Text="{Binding SelectedInvoice.Number, Mode=OneWay, Converter={StaticResource InvoiceNumberConverter}}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="0">
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="SemiBold" Text="Data wystawienia" />
+                        <TextBlock Margin="3,0,0,0" Text="{Binding SelectedInvoice.DateOfIssue, StringFormat={}{0:dd.MM.yyyy}}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="SemiBold" Text="Miejsce wystawienia:" />
+                        <TextBlock Margin="3,0,0,0" Text="{Binding SelectedInvoice.PlaceOfIssue}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="SemiBold" Text="Osoba wystawiająca:" />
+                        <TextBlock Margin="3,0,0,0" Text="{Binding SelectedInvoice.NameOfTheIssuer, Mode=OneWay}" />
+                    </StackPanel>
+
+                </StackPanel>
+                <!--#endregion Basic Information-->
+
+                <!--#region Issuer-->
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Margin="0,0,30,0">
+
+                    <StackPanel.Resources>
+                        <Style BasedOn="{StaticResource InvoicePreviewDefaultTextBlockStyle}" TargetType="TextBlock" />
+                    </StackPanel.Resources>
+
+                    <TextBlock Style="{StaticResource InvoicePreviewHeaderTextBlockStyle}" Text="Sprzedawca" />
+
+                    <Separator
+                        Height="1.5"
+                        Margin="0,0,0,2"
+                        Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                    <TextBlock Text="{Binding SelectedInvoice.Issuer.Name, Mode=OneWay}" />
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding SelectedInvoice.Issuer.Town, Mode=OneWay}" />
+                        <TextBlock Text="{Binding SelectedInvoice.Issuer.ZipCode, Mode=OneWay}" />
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding SelectedInvoice.Issuer.Street, Mode=OneWay}" />
+
+                    <TextBlock Text="{Binding SelectedInvoice.Issuer.Nip, Mode=OneWay}" />
+
+                    <TextBlock Text="{Binding SelectedInvoice.Issuer.EmailAddress, Mode=OneWay}" />
+                </StackPanel>
+                <!--#endregion Issuer-->
+
+                <!--#region Recipient-->
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Margin="30,0,0,0">
+
+                    <StackPanel.Resources>
+                        <Style BasedOn="{StaticResource InvoicePreviewDefaultTextBlockStyle}" TargetType="TextBlock" />
+                    </StackPanel.Resources>
+
+                    <TextBlock Style="{StaticResource InvoicePreviewHeaderTextBlockStyle}" Text="Nabywca" />
+
+                    <Separator
+                        Height="1.5"
+                        Margin="0,0,0,2"
+                        Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                    <TextBlock Text="{Binding SelectedInvoice.Recipient.Name}" />
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding SelectedInvoice.Recipient.Town, Mode=OneWay}" />
+                        <TextBlock Text="{Binding SelectedInvoice.Recipient.ZipCode, Mode=OneWay}" />
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding SelectedInvoice.Recipient.Street, Mode=OneWay}" />
+
+                    <TextBlock Text="{Binding SelectedInvoice.Recipient.Nip, Mode=OneWay}" />
+
+                    <TextBlock Text="{Binding SelectedInvoice.Recipient.EmailAddress, Mode=OneWay}" />
+                </StackPanel>
+                <!--#endregion Recipient-->
+
+                <!--#region Product List-->
+                <DataGrid
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    ItemsSource="{Binding SelectedInvoice.Items}"
+                    Style="{StaticResource InvoicePreviewDataGridStyle}">
+
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource InvoicePreviewDataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}" />
+                        <Style BasedOn="{StaticResource DefaultDataGridCellStyle}" TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Padding" Value="3,3" />
+                        </Style>
+
+                        <ContextMenu x:Key="dataGridContextMenu">
+                            <ContextMenu.Items>
+                                <MenuItem Cursor="Hand" Header="Usuń">
+                                    <MenuItem.Icon>
+                                        <materialDesign:PackIcon Kind="Delete" Style="{StaticResource MenuItemMarkAsPaidIconStyle}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Cursor="Hand" Header="Edytuj">
+                                    <MenuItem.Icon>
+                                        <materialDesign:PackIcon Kind="Edit" Style="{StaticResource MenuItemMarkAsPaidIconStyle}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu.Items>
+                        </ContextMenu>
+                    </DataGrid.Resources>
+
+                    <DataGrid.RowStyle>
+                        <Style BasedOn="{StaticResource MaterialDesignDataGridRow}" TargetType="DataGridRow">
+                            <Setter Property="ContextMenu" Value="{StaticResource dataGridContextMenu}" />
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="3.5*"
+                            Binding="{Binding Name}"
+                            CanUserSort="False"
+                            Header="Nazwa" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Quantity}"
+                            CanUserSort="False"
+                            Header="Ilość" />
+                        <DataGridTextColumn
+                            Width="1.6*"
+                            Binding="{Binding Unit}"
+                            CanUserSort="False"
+                            Header="Jednostka" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding VatPercent, StringFormat={}{0}%}"
+                            CanUserSort="False"
+                            Header="VAT" />
+                        <DataGridTextColumn
+                            Width="1.8*"
+                            Binding="{Binding NetPrice, ConverterCulture='pl-PL', StringFormat=c}"
+                            CanUserSort="False"
+                            Header="Cena Netto" />
+                        <DataGridTextColumn
+                            Width="1.8*"
+                            Binding="{Binding GrossPrice, ConverterCulture='pl-PL', StringFormat=c}"
+                            CanUserSort="False"
+                            Header="Cena Brutto" />
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                <!--#endregion Product List-->
+
+                <!--#region Payment Information-->
+                <StackPanel
+                    Grid.Row="7"
+                    Grid.Column="0"
+                    Margin="0,0,30,0">
+
+                    <Separator
+                        Height="1.5"
+                        Margin="0,0,0,2"
+                        Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="SemiBold" Text="Termin płatności" />
+                        <TextBlock Margin="3,0,0,2" Text="{Binding SelectedInvoice.PaymentTerm, StringFormat={}{0:dd.MM.yyyy}}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="SemiBold" Text="Forma płatności:" />
+                        <TextBlock Margin="3,0,0,2" Text="przelew" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="SemiBold" Text="Nazwa banku:" />
+                        <TextBlock Margin="3,0,0,2" Text="{Binding SelectedInvoice.BankName}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="SemiBold" Text="IBAN:" />
+                        <TextBlock Margin="3,0,0,2" Text="{Binding SelectedInvoice.Iban}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="7"
+                    Grid.Column="1"
+                    Margin="30,0,0,0">
+
+                    <Separator
+                        Height="1.5"
+                        Margin="0,0,0,2"
+                        Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Text="Do zapłaty:" />
+                        <TextBlock
+                            Margin="3,0,0,2"
+                            FontSize="14"
+                            Text="{Binding SelectedInvoice.TotalPrice, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+
+                </StackPanel>
+                <!--#endregion Payment Information-->
+
+                <!--#region Remarks-->
+                <TextBlock
+                    Grid.Row="8"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Style="{StaticResource InvoicePreviewRemarksStyle}"
+                    Text="{Binding SelectedInvoice.Remarks, Mode=OneWay}" />
+                <!--#endregion Remarks-->
+            </Grid>
+        </Grid>
+        <!--#endregion-->
+
+    </Grid>
+
+</UserControl>

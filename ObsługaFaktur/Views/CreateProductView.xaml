@@ -1,0 +1,252 @@
+﻿<UserControl
+    x:Class="ObsługaFaktur.Views.CreateProductView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:ObsługaFaktur.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewModels:CreateProductViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="{StaticResource DefaultLightGray}"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <Grid Height="235" Style="{StaticResource DefaultCreatePageGrid}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--#region Page title-->
+        <TextBlock
+            Grid.Row="0"
+            Style="{StaticResource DefaultCreatePageTitleStyle}"
+            Text="Nowy Produkt" />
+        <!--#endregion-->
+
+        <!--#region Page Content-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <!--#region Product Name-->
+            <Grid
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="5,0,5,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,1"
+                    Text="Nazwa:" />
+
+                <TextBox
+                    Grid.Row="1"
+                    Margin="0,0,0,0"
+                    Padding="10,0,0,0"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    BorderBrush="LightGray"
+                    BorderThickness="1.5"
+                    Style="{StaticResource InvoiceFormDefaultTextBox}"
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Product Unit-->
+            <Grid
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="5,0,5,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,1"
+                    Text="Jednostka:" />
+
+                <ComboBox
+                    Grid.Row="1"
+                    Padding="10,0,10,0"
+                    VerticalContentAlignment="Center"
+                    BorderBrush="LightGray"
+                    BorderThickness="1.5"
+                    Cursor="Hand"
+                    ItemsSource="{Binding ProductUnits}"
+                    Style="{StaticResource FormComboBox}"
+                    Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Product Vat Percent-->
+            <Grid
+                Grid.Row="0"
+                Grid.Column="2"
+                Margin="5,0,5,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,1"
+                    Text="% VAT:" />
+
+                <TextBox
+                    Grid.Row="1"
+                    Margin="0,0,0,0"
+                    Padding="10,0,0,0"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    BorderBrush="LightGray"
+                    BorderThickness="1.5"
+                    Style="{StaticResource InvoiceFormDefaultTextBox}"
+                    Text="{Binding VatPercent, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Product Net Price-->
+            <Grid
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="5,0,5,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,1"
+                    Text="Cena Netto:" />
+
+                <TextBox
+                    Grid.Row="1"
+                    Margin="0,0,0,0"
+                    Padding="10,0,0,0"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    BorderBrush="LightGray"
+                    BorderThickness="1.5"
+                    Style="{StaticResource InvoiceFormDefaultTextBox}"
+                    Text="{Binding UnitNetPrice, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Product Comment-->
+            <Grid
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="5,0,5,10"
+                ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,1"
+                    Text="Komentarz:" />
+
+                <TextBox
+                    Grid.Row="1"
+                    Margin="0,0,0,0"
+                    Padding="10,0,0,0"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    BorderBrush="LightGray"
+                    BorderThickness="1.5"
+                    Style="{StaticResource InvoiceFormDefaultTextBox}"
+                    Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Error-->
+            <Grid
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="5,0,5,10"
+                ColumnSpan="2">
+
+                <StackPanel Orientation="Horizontal" Visibility="{Binding Path=ConflictErrorVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <materialDesign:PackIcon Style="{StaticResource DefaultCreatePageErrorIconStyle}" />
+
+                    <TextBlock Style="{StaticResource DefaultCreatePageErrorTextBlockStyle}" Text="Taki produkt już istnieje." />
+
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Visibility="{Binding Path=InvalidDataErrorVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <materialDesign:PackIcon Style="{StaticResource DefaultCreatePageErrorIconStyle}" />
+
+                    <TextBlock Style="{StaticResource DefaultCreatePageErrorTextBlockStyle}" Text="Niepoprawne dane." />
+
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Visibility="{Binding Path=NullOrEmptyDataErrorVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <materialDesign:PackIcon Style="{StaticResource DefaultCreatePageErrorIconStyle}" />
+
+                    <TextBlock Style="{StaticResource DefaultCreatePageErrorTextBlockStyle}" Text="Wypełnij wszystkie pola" />
+
+                </StackPanel>
+
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Buttons-->
+            <StackPanel
+                Grid.Row="2"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+
+                <Button 
+                    Command="{Binding SubmitCommand}" 
+                    Style="{StaticResource DefaultCreatePageAddButtonStyle}" 
+                    Visibility="{Binding Path=IsCreateButtonVisible, 
+                        Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                <Button
+                    Command="{Binding EditCommand}"
+                    Content="Zapisz"
+                    Style="{StaticResource DefaultCreatePageAddButtonStyle}" 
+                    Visibility="{Binding Path=IsEditButtonVisible, 
+                        Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                <Button Command="{Binding CancelCommand}" Style="{StaticResource DefaultCreatePageBackButtonStyle}"/>
+
+            </StackPanel>
+            <!--#endregion-->
+
+        </Grid>
+        <!--#endregion-->
+
+    </Grid>
+</UserControl>

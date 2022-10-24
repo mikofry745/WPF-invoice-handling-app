@@ -1,0 +1,1338 @@
+﻿<UserControl
+    x:Class="ObsługaFaktur.Views.CreateInvoiceView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:converters="clr-namespace:ObsługaFaktur.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ObsługaFaktur.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:ObsługaFaktur.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewModels:CreateInvoiceViewModel}"
+    d:DesignHeight="2000"
+    d:DesignWidth="1600"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:TextBoxDoubleConverter x:Key="DoubleConverter" />
+        <converters:TextBoxDecimalConverter x:Key="DecimalConverter" />
+        <converters:TextBoxInvoiceNumberConverter x:Key="InvoiceNumberConverter" />
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource DefaultLightGray}">
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--#region Full Invoice Form-->
+            <Grid
+                Name="NewInvoiceGrid"
+                Grid.Column="0"
+                Margin="0,0,100,0"
+                Visibility="{Binding NewInvoiceVisibilty}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="60" />
+                </Grid.RowDefinitions>
+
+                <!--#region Invoice Form-->
+                <Border MaxWidth="650" CornerRadius="50 50 50 50">
+                    <ScrollViewer>
+                        <ScrollViewer.Resources>
+                            <Style BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+                                <Style.Triggers>
+                                    <Trigger Property="Name" Value="PART_VerticalScrollBar">
+                                        <Setter Property="Margin" Value="5,-4,0,-4" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ScrollViewer.Resources>
+
+                        <Grid Margin="0,0,0,0">
+                            <Grid.RowDefinitions>
+                                <!--  Basic Information  -->
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="30" />
+
+                                <!--  From  -->
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="30" />
+
+                                <!--  To  -->
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="30" />
+
+                                <!--  Product  -->
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="30" />
+
+                                <!--  Payment  -->
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="30" />
+
+                                <!--  Comment  -->
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--#region Basic information-->
+                            <Border
+                                Padding="5,5"
+                                Background="White"
+                                CornerRadius="5 5 5 5">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Style="{StaticResource InvoicePointBorder}">
+                                            <TextBlock Style="{StaticResource InvoicePointNumber}" Text="1" />
+                                        </Border>
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormHeader}"
+                                            Text="Podstawowe infomacje" />
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Style="{StaticResource InvoiceFormLeftTextBlock}"
+                                            Text="Typ faktury:" />
+                                        <ComboBox
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Padding="10,0,10,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            ItemsSource="{Binding InvoiceTypes}"
+                                            Style="{StaticResource InvoiceFormLeftComboBox}"
+                                            Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormRightTextBlock}"
+                                            Text="Numer:" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Padding="10,0,10,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            Style="{StaticResource InvoiceFormRightTextBox}"
+                                            Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90*" />
+                                            <ColumnDefinition Width="221*" />
+                                            <ColumnDefinition Width="311*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Style="{StaticResource InvoiceFormLeftTextBlock}"
+                                            Text="Miejsce wystawienia:" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Margin="30,2,14,0"
+                                            Padding="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            Style="{StaticResource InvoiceFormLeftTextBox}"
+                                            Text="{Binding PlaceOfIssue, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            Style="{StaticResource InvoiceFormLeftTextBlock}"
+                                            Text="Data wystawienia:" />
+                                        <DatePicker
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            Margin="16,2,30,0"
+                                            Padding="10,0,10,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            SelectedDate="{Binding DateOfIssue, UpdateSourceTrigger=PropertyChanged}"
+                                            Style="{StaticResource InvoiceFormRightDatePicker}" />
+
+                                    </Grid>
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Osoba wystawiająca:" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultEndingTextBox}"
+                                        Text="{Binding NameOfTheIssuer, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion Basic information-->
+
+                            <!--#region From-->
+                            <Border
+                                Grid.Row="2"
+                                Padding="5,5"
+                                Background="White"
+                                CornerRadius="5 5 5 5">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Style="{StaticResource InvoicePointBorder}">
+                                            <TextBlock Style="{StaticResource InvoicePointNumber}" Text="2" />
+                                        </Border>
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormHeader}"
+                                            Text="Sprzedawca" />
+
+
+                                        <Button Grid.Column="3" Style="{StaticResource NewInvoiceIconButtonStyle}">
+
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="Click">
+                                                    <b:CallMethodAction MethodName="OnShowIssuerList" TargetObject="{Binding}" />
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
+
+                                            <materialDesign:PackIcon Style="{StaticResource IconAddFromListButtonIconStyle}" />
+                                        </Button>
+                                    </Grid>
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Nazwa:" />
+                                    <TextBox
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultTextBox}"
+                                        Text="{Binding IssuerName, UpdateSourceTrigger=PropertyChanged}" />
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Miasto:" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Padding="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            Style="{StaticResource InvoiceFormLeftTextBox}"
+                                            Text="{Binding IssuerTown, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormRightTextBlock}"
+                                            Text="Kod pocztowy:" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Padding="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            Style="{StaticResource InvoiceFormRightTextBox}"
+                                            Text="{Binding IssuerZipCode, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Grid>
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Ulica:" />
+                                    <TextBox
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultTextBox}"
+                                        Text="{Binding IssuerStreet, UpdateSourceTrigger=PropertyChanged}" />
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="NIP:" />
+                                    <TextBox
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultTextBox}"
+                                        Text="{Binding IssuerNip, UpdateSourceTrigger=PropertyChanged}" />
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Email:" />
+                                    <TextBox
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultEndingTextBox}"
+                                        Text="{Binding IssuerEmailAddress, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion From-->
+
+                            <!--#region To-->
+                            <Border
+                                Grid.Row="4"
+                                Padding="5,5"
+                                Background="White"
+                                CornerRadius="5 5 5 5">
+                                <StackPanel>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Style="{StaticResource InvoicePointBorder}">
+                                            <TextBlock Style="{StaticResource InvoicePointNumber}" Text="3" />
+                                        </Border>
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormHeader}"
+                                            Text="Nabywca" />
+
+
+                                        <Button Grid.Column="3" Style="{StaticResource NewInvoiceIconButtonStyle}">
+
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="Click">
+                                                    <b:CallMethodAction MethodName="OnShowRecipientList" TargetObject="{Binding}" />
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
+
+                                            <materialDesign:PackIcon Style="{StaticResource IconAddFromListButtonIconStyle}" />
+                                        </Button>
+                                    </Grid>
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Nazwa:" />
+                                    <TextBox
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultTextBox}"
+                                        Text="{Binding RecipientName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Miasto:" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Padding="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            Style="{StaticResource InvoiceFormLeftTextBox}"
+                                            Text="{Binding RecipientTown, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormRightTextBlock}"
+                                            Text="Kod pocztowy:" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Padding="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            Style="{StaticResource InvoiceFormRightTextBox}"
+                                            Text="{Binding RecipientZipCode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                    </Grid>
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Ulica:" />
+                                    <TextBox
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultTextBox}"
+                                        Text="{Binding RecipientStreet, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="NIP:" />
+                                    <TextBox
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultTextBox}"
+                                        Text="{Binding RecipientNip, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Email:" />
+                                    <TextBox
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultEndingTextBox}"
+                                        Text="{Binding RecipientEmailAddress, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion To-->
+
+                            <!--#region Product-->
+                            <Border
+                                Grid.Row="6"
+                                Padding="5,5"
+                                Background="White"
+                                CornerRadius="5 5 5 5">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Style="{StaticResource InvoicePointBorder}">
+                                            <TextBlock Style="{StaticResource InvoicePointNumber}" Text="4" />
+                                        </Border>
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormHeader}"
+                                            Text="Produkty" />
+
+                                        <Button Grid.Column="3" Style="{StaticResource NewInvoiceIconButtonStyle}">
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="Click">
+                                                    <b:CallMethodAction MethodName="OnShowProductList" TargetObject="{Binding}" />
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
+
+                                            <materialDesign:PackIcon Style="{StaticResource IconAddFromListButtonIconStyle}" />
+                                        </Button>
+                                    </Grid>
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Nazwa:" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultTextBox}"
+                                        Text="{Binding NewItem.Name, UpdateSourceTrigger=PropertyChanged}" />
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="3*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Jednostka:" />
+                                        <ComboBox
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Padding="10,0,10,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            ItemsSource="{Binding ProductUnits}"
+                                            Style="{StaticResource InvoiceFormLeftComboBox}"
+                                            Text="{Binding NewItem.Unit, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormRightTextBlock}"
+                                            Text="VAT:" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Padding="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            Style="{StaticResource InvoiceFormRightTextBox}"
+                                            Text="{Binding NewItem.VatPercent, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleConverter}}" />
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,20">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="3*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Cena netto:" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Padding="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            Style="{StaticResource InvoiceFormLeftTextBox}"
+                                            Text="{Binding NewItem.NetPrice, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DecimalConverter}}" />
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormRightTextBlock}"
+                                            Text="Ilość:" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Padding="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            Style="{StaticResource InvoiceFormRightTextBox}"
+                                            Text="{Binding NewItem.Quantity, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleConverter}}" />
+                                    </Grid>
+                                    <Grid Margin="0,0,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="3*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <StackPanel 
+                                            Margin="30 10 0 0"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Top"
+                                            Visibility="{Binding Path=NewProductNullArgumentsErrorVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                            <materialDesign:PackIcon Style="{StaticResource DefaultCreatePageErrorIconStyle}" />
+
+                                            <TextBlock Style="{StaticResource DefaultCreatePageErrorTextBlockStyle}" Text="Wypełnij wszysystkie pola." />
+
+                                        </StackPanel>
+
+                                        <Button
+                                            Grid.Column="1"
+                                            Width="120"
+                                            Height="40"
+                                            Margin="0,0,30,20"
+                                            HorizontalAlignment="Right"
+                                            Background="{StaticResource DefaultBlue}"
+                                            BorderBrush="{StaticResource DefaultBlue}"
+                                            Content="Dodaj"
+                                            Foreground="White">
+
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="Click">
+                                                    <b:CallMethodAction MethodName="OnAddItemToInvoiceItems" TargetObject="{Binding}" />
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
+                                        </Button>
+                                    </Grid>
+
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion Product-->
+
+                            <!--#region Payment-->
+                            <Border
+                                Grid.Row="8"
+                                Padding="5,5"
+                                Background="White"
+                                CornerRadius="5 5 5 5">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Style="{StaticResource InvoicePointBorder}">
+                                            <TextBlock Style="{StaticResource InvoicePointNumber}" Text="5" />
+                                        </Border>
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormHeader}"
+                                            Text="Informacje na temat płatności" />
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Style="{StaticResource InvoiceFormLeftTextBlock}"
+                                            Text="Metoda płatności:" />
+
+                                        <ComboBox
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Padding="10,0,10,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            ItemsSource="{Binding PaymentMethods}"
+                                            Style="{StaticResource InvoiceFormLeftComboBox}"
+                                            Text="{Binding PaymentMethod, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormRightTextBlock}"
+                                            Text="Termin płatności:" />
+
+                                        <DatePicker
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Padding="10,0,10,0"
+                                            VerticalContentAlignment="Center"
+                                            BorderBrush="#808080"
+                                            BorderThickness="1"
+                                            SelectedDate="{Binding PaymentTerm, UpdateSourceTrigger=PropertyChanged}"
+                                            Style="{StaticResource InvoiceFormRightDatePicker}" />
+
+                                    </Grid>
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Nazwa banku:" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultTextBox}"
+                                        Text="{Binding BankName, UpdateSourceTrigger=PropertyChanged}" />
+
+                                    <TextBlock Style="{StaticResource InvoiceFormLeftTextBlock}" Text="Numer konta:" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Padding="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultEndingTextBox}"
+                                        Text="{Binding Iban, UpdateSourceTrigger=PropertyChanged}" />
+
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion Payment-->
+
+                            <!--#region Commnet-->
+                            <Border
+                                Grid.Row="10"
+                                Padding="5,5"
+                                Background="White"
+                                CornerRadius="5 5 5 5">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Style="{StaticResource InvoicePointBorder}">
+                                            <TextBlock Style="{StaticResource InvoicePointNumber}" Text="6" />
+                                        </Border>
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource InvoiceFormHeader}"
+                                            Text="Komentarz" />
+                                    </Grid>
+
+                                    <TextBox
+                                        Height="140"
+                                        MinWidth="280"
+                                        Padding="10,8,10,8"
+                                        AcceptsReturn="True"
+                                        BorderBrush="#808080"
+                                        BorderThickness="1"
+                                        Style="{StaticResource InvoiceFormDefaultEndingTextBox}"
+                                        Text="{Binding Remarks, UpdateSourceTrigger=PropertyChanged}"
+                                        TextWrapping="Wrap"
+                                        VerticalScrollBarVisibility="Auto" />
+
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion Comment-->
+
+                        </Grid>
+                    </ScrollViewer>
+                </Border>
+                <!--#endregion Invoice Form-->
+
+                <!--#region Buttons-->
+                <Grid Grid.Row="1" Margin="0,0,0,0">
+                    <Grid Width="auto" HorizontalAlignment="Center">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            Grid.Row="1"
+                            Style="{StaticResource DefaultCreatePageBackButtonStyle}"
+                            Width="120"
+                            Height="40"
+                            Margin="0,10,10,0"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CancelCommand}">
+                        </Button>
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource DefaultCreatePageAddButtonStyle}"
+                            Width="120"
+                            Height="40"
+                            Margin="10,10,10,0"
+                            HorizontalAlignment="Left"
+                            Command="{Binding SubmitCommand}">
+                        </Button>
+
+                    </Grid>
+                </Grid>
+                <!--#endregion Buttons-->
+
+            </Grid>
+
+            <!--#region ProductList-->
+            <Grid
+                Name="ProductList"
+                Grid.Column="0"
+                Margin="0,0,100,0"
+                Visibility="{Binding ProductListVisibilty}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="74" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="60" />
+                </Grid.RowDefinitions>
+
+                <!--#region Page title-->
+                <StackPanel Grid.Row="0" Margin="0,3,0,0">
+                    <TextBlock
+                        FontSize="17"
+                        FontWeight="Bold"
+                        Text="Produkty" />
+
+                    <TextBlock
+                        FontSize="13"
+                        FontWeight="Normal"
+                        Text="Wybierz produkt, aby dodać go do faktury" />
+                </StackPanel>
+                <!--#endregion-->
+
+                <!--#region Searchbar-->
+                <Grid Grid.Row="1" Margin="0,18,0,10">
+                    <Border
+                        Grid.Row="1"
+                        Margin="0,0,0,5"
+                        Background="White"
+                        BorderBrush="LightGray"
+                        BorderThickness="1.5"
+                        Style="{StaticResource DefaultSearchBarBorderStyle}">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button
+                                Grid.Column="0"
+                                Margin="5,0,0,0"
+                                Style="{StaticResource MaterialDesignToolButton}">
+
+                                <materialDesign:PackIcon Cursor="Hand" Style="{StaticResource DefaultSearchbarToolIcon}" />
+                            </Button>
+
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="4,0,0,3"
+                                VerticalContentAlignment="Center"
+                                BorderBrush="Transparent"
+                                Style="{StaticResource DefaultSearchBarTextBoxStyle}"
+                                Text="{Binding SearchedProductName, UpdateSourceTrigger=PropertyChanged}" />
+
+                        </Grid>
+
+                    </Border>
+                </Grid>
+                <!--#endregion-->
+
+                <!--#region Product List-->
+                <DataGrid
+                    Grid.Row="2"
+                    ItemsSource="{Binding ProductList}"
+                    SelectedItem="{Binding SelectedProduct}"
+                    Style="{StaticResource DefaultDataGridStyle}">
+
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDoubleClick">
+                            <b:CallMethodAction MethodName="OnSelectProductFromList" TargetObject="{Binding}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource DefaultDataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}" />
+                        <Style BasedOn="{StaticResource DefaultDataGridCellStyle}" TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Margin" Value="0,5,0,0" />
+                        </Style>
+                        <Style BasedOn="{StaticResource DefaultDataGridRowStyle}" TargetType="{x:Type DataGridRow}">
+                            <Setter Property="Height" Value="50" />
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Style>
+                    </DataGrid.Resources>
+
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="3*"
+                            Binding="{Binding Name}"
+                            CanUserReorder="False"
+                            Header="Nazwa"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="2*"
+                            Binding="{Binding VatPercent, StringFormat={}{0:#'%'}}"
+                            CanUserReorder="False"
+                            Header="VAT"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="3*"
+                            Binding="{Binding NetPrice, ConverterCulture='pl-PL', StringFormat={}{0:C}}"
+                            CanUserReorder="False"
+                            Header="Cena Netto"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="3*"
+                            Binding="{Binding GrossPrice, ConverterCulture='pl-PL', StringFormat={}{0:C}}"
+                            CanUserReorder="False"
+                            Header="Cena Brutto"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                <!--#endregion ProductList-->
+
+                <!--#region Product List Buttons-->
+                <Button
+                    Grid.Row="3"
+                    Width="150"
+                    Height="40"
+                    Margin="0,10,10,0"
+                    HorizontalAlignment="Center"
+                    Background="Transparent"
+                    BorderBrush="#1f332b"
+                    Content="Powrót"
+                    Foreground="#1f332b">
+
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:CallMethodAction MethodName="OnHideProductList" TargetObject="{Binding}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+                <!--#endregion-->
+
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region CustomerList-->
+            <Grid
+                Name="CustomerList"
+                Grid.Column="0"
+                Margin="0,0,100,0"
+                Visibility="{Binding CustomerListVisibilty}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="74" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="60" />
+                </Grid.RowDefinitions>
+
+                <!--#region Page title-->
+                <StackPanel Grid.Row="0" Margin="0,3,0,0">
+                    <TextBlock
+                        FontSize="17"
+                        FontWeight="Bold"
+                        Text="Klienci" />
+
+                    <TextBlock
+                        FontSize="13"
+                        FontWeight="Normal"
+                        Text="Wybierz klienta, aby dodać go do faktury" />
+                </StackPanel>
+                <!--#endregion-->
+
+                <!--#region Searchbar-->
+                <Grid Grid.Row="1" Margin="0,18,0,10">
+                    <Border
+                        Grid.Row="1"
+                        Margin="0,0,0,5"
+                        Background="White"
+                        BorderBrush="LightGray"
+                        BorderThickness="1.5"
+                        Style="{StaticResource DefaultSearchBarBorderStyle}">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button
+                                Grid.Column="0"
+                                Margin="5,0,0,0"
+                                Style="{StaticResource MaterialDesignToolButton}">
+
+                                <materialDesign:PackIcon Cursor="Hand" Style="{StaticResource DefaultSearchbarToolIcon}" />
+                            </Button>
+
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="4,0,0,3"
+                                VerticalContentAlignment="Center"
+                                BorderBrush="Transparent"
+                                Style="{StaticResource DefaultSearchBarTextBoxStyle}"
+                                Text="{Binding SearchedCustomerName, UpdateSourceTrigger=PropertyChanged}" />
+
+                        </Grid>
+
+                    </Border>
+                </Grid>
+                <!--#endregion-->
+
+                <!--#region Customer List-->
+                <DataGrid
+                    Grid.Row="2"
+                    ItemsSource="{Binding CustomerList}"
+                    SelectedItem="{Binding SelectedCustomer}"
+                    Style="{StaticResource DefaultDataGridStyle}">
+
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDoubleClick">
+                            <b:CallMethodAction MethodName="OnAddRecipientFromList" TargetObject="{Binding}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource DefaultDataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}" />
+                        <Style BasedOn="{StaticResource DefaultDataGridCellStyle}" TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Margin" Value="0,5,0,0" />
+                        </Style>
+                        <Style BasedOn="{StaticResource DefaultDataGridRowStyle}" TargetType="{x:Type DataGridRow}">
+                            <Setter Property="Height" Value="50" />
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Style>
+                    </DataGrid.Resources>
+
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="2.4*"
+                            Binding="{Binding Name}"
+                            CanUserReorder="False"
+                            Header="Nazwa"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="2.8*"
+                            Binding="{Binding Street}"
+                            CanUserReorder="False"
+                            Header="Ulica"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="3.6*"
+                            Binding="{Binding EmailAddress}"
+                            CanUserReorder="False"
+                            Header="Email"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="3*"
+                            Binding="{Binding Nip}"
+                            CanUserReorder="False"
+                            Header="NIP"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                <!--#endregion ProductList-->
+
+                <!--#region Product List Buttons-->
+                <Button
+                    Grid.Row="3"
+                    Width="150"
+                    Height="40"
+                    Margin="0,10,10,0"
+                    HorizontalAlignment="Center"
+                    Background="Transparent"
+                    BorderBrush="#1f332b"
+                    Content="Powrót"
+                    Foreground="#1f332b">
+
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:CallMethodAction MethodName="OnHideCustomerList" TargetObject="{Binding}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+                <!--#endregion-->
+
+            </Grid>
+            <!--#endregion CustomerList-->
+
+            <!--#endregion Full Invoice Form-->
+
+            <!--#region Invoice Preview-->
+            <Grid
+                Grid.Column="1"
+                MaxWidth="650"
+                Margin="0,0,50,0"
+                Background="White">
+
+                <Grid Margin="40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!--#region Basic Information-->
+                    <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                FontSize="20"
+                                FontWeight="SemiBold"
+                                Text="Faktura " />
+                            <TextBlock
+                                FontSize="20"
+                                FontWeight="SemiBold"
+                                Text="{Binding Type, Mode=OneWay}" />
+                            <TextBlock
+                                Margin="3,0,0,0"
+                                FontSize="20"
+                                Text="{Binding Number, Mode=OneWay, Converter={StaticResource InvoiceNumberConverter}}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.Column="0">
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="SemiBold" Text="Data wystawienia" />
+                            <TextBlock Margin="3,0,0,0" Text="{Binding DateOfIssue, StringFormat={}{0:dd.MM.yyyy}}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="SemiBold" Text="Miejsce wystawienia:" />
+                            <TextBlock Margin="3,0,0,0" Text="{Binding PlaceOfIssue}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="SemiBold" Text="Osoba wystawiająca:" />
+                            <TextBlock Margin="3,0,0,0" Text="{Binding NameOfTheIssuer, Mode=OneWay}" />
+                        </StackPanel>
+
+                    </StackPanel>
+                    <!--#endregion Basic Information-->
+
+                    <!--#region Issuer-->
+                    <StackPanel
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="0,0,30,0">
+
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource InvoicePreviewDefaultTextBlockStyle}" TargetType="TextBlock" />
+                        </StackPanel.Resources>
+
+                        <TextBlock Style="{StaticResource InvoicePreviewHeaderTextBlockStyle}" Text="Sprzedawca" />
+
+                        <Separator
+                            Height="1.5"
+                            Margin="0,0,0,2"
+                            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                        <TextBlock Text="{Binding IssuerName, Mode=OneWay}" />
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding IssuerTown, Mode=OneWay}" />
+                            <TextBlock Text="{Binding IssuerZipCode, Mode=OneWay}" />
+                        </StackPanel>
+
+                        <TextBlock Text="{Binding IssuerStreet, Mode=OneWay}" />
+
+                        <TextBlock Text="{Binding IssuerNip, Mode=OneWay}" />
+
+                        <TextBlock Text="{Binding IssuerEmailAddress, Mode=OneWay}" />
+                    </StackPanel>
+                    <!--#endregion Issuer-->
+
+                    <!--#region Recipient-->
+                    <StackPanel
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="30,0,0,0">
+
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource InvoicePreviewDefaultTextBlockStyle}" TargetType="TextBlock" />
+                        </StackPanel.Resources>
+
+                        <TextBlock Style="{StaticResource InvoicePreviewHeaderTextBlockStyle}" Text="Nabywca" />
+
+                        <Separator
+                            Height="1.5"
+                            Margin="0,0,0,2"
+                            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                        <TextBlock Text="{Binding RecipientName}" />
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding RecipientTown, Mode=OneWay}" />
+                            <TextBlock Text="{Binding RecipientZipCode, Mode=OneWay}" />
+                        </StackPanel>
+
+                        <TextBlock Text="{Binding RecipientStreet, Mode=OneWay}" />
+
+                        <TextBlock Text="{Binding RecipientNip, Mode=OneWay}" />
+
+                        <TextBlock Text="{Binding RecipientEmailAddress, Mode=OneWay}" />
+                    </StackPanel>
+                    <!--#endregion Recipient-->
+
+                    <!--#region Product List-->
+                    <DataGrid
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        ItemsSource="{Binding InvoiceItems}"
+                        Style="{StaticResource InvoicePreviewDataGridStyle}">
+
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource InvoicePreviewDataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}" />
+                            <Style BasedOn="{StaticResource DefaultDataGridCellStyle}" TargetType="{x:Type DataGridCell}">
+                                <Setter Property="Padding" Value="3,3" />
+                            </Style>
+
+                            <ContextMenu x:Key="dataGridContextMenu">
+                                <ContextMenu.Items>
+                                    <MenuItem Cursor="Hand" Header="Usuń">
+                                        <MenuItem.Icon>
+                                            <materialDesign:PackIcon Kind="Delete" Style="{StaticResource MenuItemMarkAsPaidIconStyle}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Cursor="Hand" Header="Edytuj">
+                                        <MenuItem.Icon>
+                                            <materialDesign:PackIcon Kind="Edit" Style="{StaticResource MenuItemMarkAsPaidIconStyle}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu.Items>
+                            </ContextMenu>
+                        </DataGrid.Resources>
+
+                        <DataGrid.RowStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignDataGridRow}" TargetType="DataGridRow">
+                                <Setter Property="ContextMenu" Value="{StaticResource dataGridContextMenu}" />
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="3.5*"
+                                Binding="{Binding Name}"
+                                CanUserSort="False"
+                                Header="Nazwa" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Quantity}"
+                                CanUserSort="False"
+                                Header="Ilość" />
+                            <DataGridTextColumn
+                                Width="1.6*"
+                                Binding="{Binding Unit}"
+                                CanUserSort="False"
+                                Header="Jednostka" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding VatPercent, StringFormat={}{0}%}"
+                                CanUserSort="False"
+                                Header="VAT %" />
+                            <DataGridTextColumn
+                                Width="1.8*"
+                                Binding="{Binding NetPrice, ConverterCulture='pl-PL', StringFormat=c}"
+                                CanUserSort="False"
+                                Header="Cena Netto" />
+                            <DataGridTextColumn
+                                Width="1.8*"
+                                Binding="{Binding GrossPrice, ConverterCulture='pl-PL', StringFormat=c}"
+                                CanUserSort="False"
+                                Header="Wartość brutto" />
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                    <!--#endregion Product List-->
+
+                    <!--#region Payment Information-->
+                    <StackPanel
+                        Grid.Row="7"
+                        Grid.Column="0"
+                        Margin="0,0,30,0">
+
+                        <Separator
+                            Height="1.5"
+                            Margin="0,0,0,2"
+                            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="SemiBold" Text="Termin płatności" />
+                            <TextBlock Margin="3,0,0,2" Text="{Binding PaymentTerm, StringFormat={}{0:dd.MM.yyyy}}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="SemiBold" Text="Forma płatności:" />
+                            <TextBlock Margin="3,0,0,2" Text="{Binding PaymentMethod}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="SemiBold" Text="Nazwa banku:" />
+                            <TextBlock Margin="3,0,0,2" Text="{Binding BankName}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="SemiBold" Text="IBAN:" />
+                            <TextBlock Margin="3,0,0,2" Text="{Binding Iban}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Row="7"
+                        Grid.Column="1"
+                        Margin="30,0,0,0">
+
+                        <Separator
+                            Height="1.5"
+                            Margin="0,0,0,2"
+                            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="Bold"
+                                Text="Do zapłaty:" />
+                            <TextBlock
+                                Margin="3,0,0,2"
+                                FontSize="14"
+                                Text="{Binding TotalPrice, ConverterCulture='pl-PL', StringFormat={}{0:C}}" />
+                        </StackPanel>
+
+                    </StackPanel>
+                    <!--#endregion Payment Information-->
+
+                    <!--#region Remarks-->
+                    <TextBlock
+                        Grid.Row="8"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource InvoicePreviewRemarksStyle}"
+                        Text="{Binding Remarks, Mode=OneWay}" />
+                    <!--#endregion Remarks-->
+
+                </Grid>
+            </Grid>
+            <!--#endregion Invoice Preview-->
+
+        </Grid>
+    </Grid>
+</UserControl>
