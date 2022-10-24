@@ -64,15 +64,13 @@ namespace ObsługaFaktur.Commands
                     || String.IsNullOrEmpty(invoice.PaymentMethod.ToString()) || String.IsNullOrEmpty(invoice.Iban) 
                     || String.IsNullOrEmpty(invoice.TotalPrice.ToString()) || String.IsNullOrEmpty(invoice.BankName)
                     || String.IsNullOrEmpty(invoice.Recipient.Nip) || String.IsNullOrEmpty(invoice.Recipient.EmailAddress)
-                    || String.IsNullOrEmpty(invoice.Recipient.BankName) || String.IsNullOrEmpty(invoice.Recipient.Country)
-                    || String.IsNullOrEmpty(invoice.Recipient.Iban) || String.IsNullOrEmpty(invoice.Recipient.Name)
+                    || String.IsNullOrEmpty(invoice.Recipient.Name)
                     || String.IsNullOrEmpty(invoice.Recipient.Town) || String.IsNullOrEmpty(invoice.Recipient.Street)
-                    || String.IsNullOrEmpty(invoice.Recipient.PhoneNumber) || String.IsNullOrEmpty(invoice.Recipient.ZipCode)
+                    || String.IsNullOrEmpty(invoice.Recipient.ZipCode)
                     || String.IsNullOrEmpty(invoice.Issuer.Nip) || String.IsNullOrEmpty(invoice.Issuer.EmailAddress)
-                    || String.IsNullOrEmpty(invoice.Issuer.BankName) || String.IsNullOrEmpty(invoice.Issuer.Country)
-                    || String.IsNullOrEmpty(invoice.Issuer.Iban) || String.IsNullOrEmpty(invoice.Issuer.Name)
+                    || String.IsNullOrEmpty(invoice.Issuer.Name)
                     || String.IsNullOrEmpty(invoice.Issuer.Town) || String.IsNullOrEmpty(invoice.Issuer.Street)
-                    || String.IsNullOrEmpty(invoice.Issuer.PhoneNumber) || String.IsNullOrEmpty(invoice.Issuer.ZipCode))
+                    || String.IsNullOrEmpty(invoice.Issuer.ZipCode))
                 {
                     throw new ArgumentNullException();
                 }
