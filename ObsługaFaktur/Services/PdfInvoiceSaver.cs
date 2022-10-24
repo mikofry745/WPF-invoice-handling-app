@@ -8,6 +8,8 @@ namespace ObsługaFaktur.Services
 {
     public class PdfInvoiceSaver : IInvoiceSaver
     {
+        private readonly string directory = "InvoicePdfs";
+
         public void Save(InvoiceViewModel invoiceViewModel)
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -162,8 +164,19 @@ namespace ObsługaFaktur.Services
             //Choose the location where pdfs will be saved
             string solutionLocation = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
             //string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            
-            string path = Path.Combine(solutionLocation, "InvoicePdfs", "INV#" + invoiceViewModel.Number + ".pdf");
+
+            if (!Directory.Exists(Path.Combine(solutionLocation, directory)))
+            {
+                Directory.CreateDirectory(Path.Combine(solutionLocation, directory));
+            }
+
+            //if (!Directory.Exists(Path.Combine(executableLocation, directory)))
+            //{
+            //    Directory.CreateDirectory(Path.Combine(executableLocation, directory));
+            //}
+
+            string path = Path.Combine(solutionLocation, directory, "INV#" + invoiceViewModel.Number + ".pdf");
+            //string path = Path.Combine(executableLocation, directory, "INV#" + invoiceViewModel.Number + ".pdf");
 
             document.Save(path);
         }
