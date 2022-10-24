@@ -7,19 +7,19 @@ You will need .NET 6 and IDE(tested on visual studio 2022).
 
 1. Clone this repository (master branch).
 2. Open NuGet Package Manager Console.
-3. Change the directory to the one where the project is located
+3. Change the directory to the one where the project is located.
 ```bash
 cd ...\WPF-invoice-handling-app\ObsługaFaktur
 ```
-4. Create a migration
+4. Create a migration.
 ```bash
 dotnet ef migrations add InitialCreate
 ```
-5. Update database
+5. Update database.
 ```bash
 dotnet ef database update
 ```
-6. Run the application
+6. Run the application.
 
 ## NuGet Packages
 1. Fody
