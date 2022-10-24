@@ -1,0 +1,449 @@
+﻿<Application
+    x:Class="ObsługaFaktur.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:ObsługaFaktur.Controls"
+    xmlns:local="clr-namespace:ObsługaFaktur"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+
+                <ResourceDictionary Source="Styles/Brushes.xaml" />
+                <ResourceDictionary Source="Styles/ScrollbarStyle.xaml" />
+                <ResourceDictionary Source="Styles/CreateViewStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+            <Style x:Key="LeftMenuButton" TargetType="{x:Type controls:MenuButton}">
+                <Setter Property="Height" Value="38" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{StaticResource DefaultDarkGray}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="-4" />
+                <Setter Property="Margin" Value="10,4,10,2" />
+                <Setter Property="Cursor" Value="Hand" />
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type controls:MenuButton}">
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="2 2 2 2">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource DefaultMidGray}" />
+                        <Setter Property="Foreground" Value="#138eff" />
+                    </Trigger>
+
+                    <Trigger Property="IsActive" Value="True">
+                        <Setter Property="Background" Value="{StaticResource DefaultLightGray}" />
+                        <Setter Property="Foreground" Value="#138eff" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="LeftMenuButtonContentStackPanel" TargetType="StackPanel">
+                <Setter Property="Orientation" Value="Horizontal" />
+                <Setter Property="Width" Value="168" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+
+
+
+            <!--#region DataGrid Styles-->
+
+            <!--  Default DataGrid  Style  -->
+            <Style
+                x:Key="DefaultDataGridStyle"
+                BasedOn="{StaticResource MaterialDesignDataGrid}"
+                TargetType="DataGrid">
+
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="AutoGenerateColumns" Value="false" />
+                <Setter Property="CanUserReorderColumns" Value="False" />
+                <Setter Property="CanUserResizeColumns" Value="False" />
+                <Setter Property="CanUserResizeRows" Value="False" />
+                <Setter Property="FontSize" Value="13.5" />
+                <Setter Property="SelectionMode" Value="Extended" />
+
+            </Style>
+
+            <!--  Default DataGrid Row Style  -->
+            <Style
+                x:Key="DefaultDataGridRowStyle"
+                BasedOn="{StaticResource {x:Type DataGridRow}}"
+                TargetType="{x:Type DataGridRow}">
+
+                <Setter Property="Background" Value="White" />
+                <Setter Property="Margin" Value="0,5" />
+                <Setter Property="Height" Value="43" />
+
+            </Style>
+
+            <!--  Default DataGrid Column Header Style  -->
+            <Style
+                x:Key="DefaultDataGridColumnHeaderStyle"
+                BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}"
+                TargetType="{x:Type DataGridColumnHeader}">
+
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Cursor" Value="Hand" />
+            </Style>
+
+            <!--  Default DataGrid Cell Style  -->
+            <Style
+                x:Key="DefaultDataGridCellStyle"
+                BasedOn="{StaticResource MaterialDesignDataGridCell}"
+                TargetType="{x:Type DataGridCell}">
+
+                <Setter Property="Padding" Value="16,10,0,0" />
+
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Trigger>
+                </Style.Triggers>
+
+            </Style>
+
+            <!--  Default DataGrid Column Style  -->
+            <Style x:Key="DefaultDataGridColumnStyle" TargetType="{x:Type DataGridTextColumn}">
+
+                <Setter Property="CanUserReorder" Value="False" />
+                <Setter Property="IsReadOnly" Value="True" />
+
+            </Style>
+
+            <!--#endregion DataGrid Styles-->
+
+            <!--  Default Page Searchbar Styles  -->
+            <Style x:Key="DefaultSearchBarBorderStyle" TargetType="{x:Type Border}">
+                <Setter Property="BorderBrush" Value="#c1c1c1" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="2" />
+                <Setter Property="Height" Value="40" />
+            </Style>
+
+            <Style
+                x:Key="DefaultSearchBarTextBoxStyle"
+                BasedOn="{StaticResource MaterialDesignOutlinedTextBox}"
+                TargetType="{x:Type TextBox}">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="materialDesign:HintAssist.IsFloating" Value="False" />
+                <Setter Property="materialDesign:HintAssist.Hint" Value="Szukaj" />
+            </Style>
+
+            <Style x:Key="DefaultSearchbarToolIcon" TargetType="{x:Type materialDesign:PackIcon}">
+                <Setter Property="Width" Value="20" />
+                <Setter Property="Height" Value="20" />
+                <Setter Property="Kind" Value="Search" />
+                <Setter Property="Foreground" Value="Black" />
+            </Style>
+
+            <!--#region Invoice Preview Styles-->
+
+            <Style x:Key="InvoicePreviewDefaultTextBlockStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="0,0,3,2" />
+            </Style>
+
+            <Style x:Key="InvoicePreviewHeaderTextBlockStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="0,0,0,10" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+            </Style>
+
+            <Style
+                x:Key="InvoicePreviewDataGridStyle"
+                BasedOn="{StaticResource MaterialDesignDataGrid}"
+                TargetType="{x:Type DataGrid}">
+                <Setter Property="AutoGenerateColumns" Value="False" />
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="materialDesign:DataGridAssist.CornerRadius" Value="5" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="HorizontalScrollBarVisibility" Value="Hidden" />
+                <Setter Property="CanUserResizeColumns" Value="False" />
+                <Setter Property="CanUserResizeRows" Value="False" />
+                <Setter Property="CanUserReorderColumns" Value="False" />
+            </Style>
+
+            <Style
+                x:Key="InvoicePreviewDataGridColumnHeaderStyle"
+                BasedOn="{StaticResource {x:Type DataGridColumnHeader}}"
+                TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="Background" Value="LightGray" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="Height" Value="24" />
+                <Setter Property="Padding" Value="5,0" />
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="Black" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="InvoicePreviewRemarksStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+                <Setter Property="TextAlignment" Value="Justify" />
+            </Style>
+
+            <Style x:Key="InvoicePreviewBorderStyle" TargetType="{x:Type Border}">
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="White" />
+                <Setter Property="Margin" Value="40,30,40,40" />
+                <Setter Property="CornerRadius" Value="20" />
+            </Style>
+
+            <!--#endregion Invoice Preview Styles-->
+
+            <!--  New Invoice Page Styles  -->
+            <Style x:Key="IconButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="White" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Height" Value="40" />
+                <Setter Property="Width" Value="40" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="Transparent" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+
+            <Style x:Key="IconButtonIconStyle" TargetType="{x:Type materialDesign:PackIcon}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
+            </Style>
+
+            <Style
+                x:Key="FormTextBox"
+                BasedOn="{StaticResource MaterialDesignOutlinedTextBox}"
+                TargetType="{x:Type TextBox}">
+                <Setter Property="Foreground" Value="#404040" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="FontSize" Value="13" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceFormLeftTextBox"
+                BasedOn="{StaticResource FormTextBox}"
+                TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="30,2,15,0" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceFormRightTextBox"
+                BasedOn="{StaticResource FormTextBox}"
+                TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="15,2,30,0" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceFormDefaultTextBox"
+                BasedOn="{StaticResource FormTextBox}"
+                TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="30,2,30,0" />
+                <Setter Property="Background" Value="White" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceFormDefaultEndingTextBox"
+                BasedOn="{StaticResource FormTextBox}"
+                TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="30,2,30,30" />
+            </Style>
+
+            <Style
+                x:Key="FormDatePicker"
+                BasedOn="{StaticResource MaterialDesignOutlinedDatePicker}"
+                TargetType="{x:Type DatePicker}">
+                <Setter Property="Foreground" Value="#404040" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="FontSize" Value="13" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceFormLeftDatePicker"
+                BasedOn="{StaticResource FormDatePicker}"
+                TargetType="{x:Type DatePicker}">
+                <Setter Property="Margin" Value="30,2,15,0" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceFormRightDatePicker"
+                BasedOn="{StaticResource FormDatePicker}"
+                TargetType="{x:Type DatePicker}">
+                <Setter Property="Margin" Value="15,2,30,0" />
+            </Style>
+
+            <Style
+                x:Key="FormComboBox"
+                BasedOn="{StaticResource MaterialDesignOutlinedComboBox}"
+                TargetType="{x:Type ComboBox}">
+                <Setter Property="Foreground" Value="#404040" />
+                <Setter Property="Background" Value="White" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="FontSize" Value="13" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceFormLeftComboBox"
+                BasedOn="{StaticResource FormComboBox}"
+                TargetType="{x:Type ComboBox}">
+                <Setter Property="Margin" Value="30,2,15,0" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceFormRightComboBox"
+                BasedOn="{StaticResource FormComboBox}"
+                TargetType="{x:Type ComboBox}">
+                <Setter Property="Margin" Value="15,2,30,0" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceFormDefaultComboBox"
+                BasedOn="{StaticResource FormComboBox}"
+                TargetType="{x:Type ComboBox}">
+                <Setter Property="Margin" Value="30,2,30,0" />
+            </Style>
+
+            <Style x:Key="InvoiceFormLeftTextBlock" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="Foreground" Value="#404040" />
+                <Setter Property="Margin" Value="30,6,0,0" />
+            </Style>
+
+            <Style x:Key="InvoiceFormRightTextBlock" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="Foreground" Value="#404040" />
+                <Setter Property="Margin" Value="15,6,0,0" />
+            </Style>
+
+            <Style x:Key="InvoiceFormHeader" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="17" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="#404040" />
+                <Setter Property="Margin" Value="5,20,30,10" />
+            </Style>
+
+            <Style x:Key="InvoicePointBorder" TargetType="{x:Type Border}">
+                <Setter Property="Width" Value="22" />
+                <Setter Property="Height" Value="22" />
+                <Setter Property="Padding" Value="0,0,0,1" />
+                <Setter Property="Background" Value="#2bd19d" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="CornerRadius" Value="50" />
+                <Setter Property="Margin" Value="30,12,3,0" />
+            </Style>
+
+            <Style x:Key="InvoicePointNumber" TargetType="{x:Type TextBlock}">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="{StaticResource DefaultLightGray}" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+
+            <Style
+                x:Key="NewInvoiceIconButtonStyle"
+                BasedOn="{StaticResource IconButtonStyle}"
+                TargetType="{x:Type Button}">
+                <Setter Property="Margin" Value="0,10,30,0" />
+                <Setter Property="Padding" Value="0" />
+            </Style>
+
+            <Style
+                x:Key="IconEditBusinessInfoButtonIconStyle"
+                BasedOn="{StaticResource IconButtonIconStyle}"
+                TargetType="{x:Type materialDesign:PackIcon}">
+                <Setter Property="Kind" Value="AccountEdit" />
+                <Setter Property="Height" Value="26" />
+                <Setter Property="Width" Value="26" />
+                <Setter Property="ToolTip" Value="Edytuj profil biznesowy" />
+            </Style>
+
+            <Style
+                x:Key="IconAddFromListButtonIconStyle"
+                BasedOn="{StaticResource IconButtonIconStyle}"
+                TargetType="{x:Type materialDesign:PackIcon}">
+                <Setter Property="Kind" Value="PlaylistAdd" />
+                <Setter Property="Height" Value="26" />
+                <Setter Property="Width" Value="26" />
+                <Setter Property="ToolTip" Value="Dodaj z listy" />
+            </Style>
+
+            <Style
+                x:Key="IconSaveToListButtonIconStyle"
+                BasedOn="{StaticResource IconButtonIconStyle}"
+                TargetType="{x:Type materialDesign:PackIcon}">
+                <Setter Property="Kind" Value="ContentSaveCheck" />
+                <Setter Property="Height" Value="22" />
+                <Setter Property="Width" Value="22" />
+                <Setter Property="ToolTip" Value="Zapisz" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceDataGridStyle1"
+                BasedOn="{StaticResource DefaultDataGridStyle}"
+                TargetType="{x:Type DataGrid}">
+                <Setter Property="Margin" Value="0,10,0,0" />
+            </Style>
+
+            <Style
+                x:Key="InvoiceDataGridStyle2"
+                BasedOn="{StaticResource DefaultDataGridStyle}"
+                TargetType="{x:Type DataGrid}">
+                <Setter Property="Margin" Value="0,10,0,0" />
+            </Style>
+            <Style
+                x:Key="IconAddButtonStyle"
+                BasedOn="{StaticResource IconButtonStyle}"
+                TargetType="{x:Type Button}">
+                <Setter Property="Margin" Value="0,5,-7,0" />
+            </Style>
+
+            <Style
+                x:Key="IconAddButtonIconStyle"
+                BasedOn="{StaticResource IconButtonIconStyle}"
+                TargetType="{x:Type materialDesign:PackIcon}">
+                <Setter Property="Kind" Value="Plus" />
+                <Setter Property="Height" Value="36" />
+                <Setter Property="Width" Value="36" />
+                <Setter Property="ToolTip" Value="Dodaj" />
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

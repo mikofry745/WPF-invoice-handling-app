@@ -1,0 +1,65 @@
+﻿<Window
+    x:Class="ObsługaFaktur.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:modalControl="clr-namespace:ModalControl;assembly=ModalControl"
+    xmlns:components="clr-namespace:ObsługaFaktur.Components"
+    xmlns:viewmodels="clr-namespace:ObsługaFaktur.ViewModels"
+    xmlns:views="clr-namespace:ObsługaFaktur.Views"
+    Title="InvoiceApp"
+    WindowState="Maximized"
+    Width="1400"
+    Height="700"
+    mc:Ignorable="d">
+
+    <Grid>
+        <!--  Mapowanie ViewModeli na View  -->
+        <Grid.Resources>
+            <!--<DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
+                <views:HomeView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:AccountViewModel}">
+                <views:AccountView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+                <views:LoginView />
+            </DataTemplate>-->
+            <DataTemplate DataType="{x:Type viewmodels:LayoutViewModel}">
+                <components:Layout />
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type viewmodels:CreateProductViewModel}">
+                <views:CreateProductView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:ProductListingViewModel}">
+                <views:ProductListingView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:CreateCustomerViewModel}">
+                <views:CreateCustomerView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:CustomerListingViewModel}">
+                <views:CustomerListingView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:CreateInvoiceViewModel}">
+                <views:CreateInvoiceView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:InvoiceListingViewModel}">
+                <views:InvoiceListingView />
+            </DataTemplate>
+        </Grid.Resources>
+
+        <modalControl:Modal Panel.ZIndex="1" IsOpen="{Binding IsOpen}">
+            <ContentControl Content="{Binding CurrentModalViewModel}" />
+        </modalControl:Modal>
+
+        <ContentControl Content="{Binding CurrentViewModel}" />
+
+        <!--<views:CreateProductView DataContext="{Binding CurrentViewModel}"/>-->
+        <!--<views:ProductListingView DataContext="{Binding CurrentViewModel}"/>-->
+        <!--<views:CreateCustomerView DataContext="{Binding CurrentViewModel}"/>-->
+        <!--<views:CustomerListingView DataContext="{Binding CurrentViewModel}"/>-->
+    </Grid>
+</Window>

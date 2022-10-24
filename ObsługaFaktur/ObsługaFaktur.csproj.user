@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Components\Layout.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Components\NavigationBar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\CreateCustomerView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\CreateInvoiceView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\CreateProductView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\CustomerListingView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\InvoiceListingView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ProductListingView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Components\Layout.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Components\NavigationBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Brushes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\CreateViewStyles.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ScrollbarStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\CreateCustomerView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\CreateInvoiceView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\CreateProductView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\CustomerListingView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\InvoiceListingView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ProductListingView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>
